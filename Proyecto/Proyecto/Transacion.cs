@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace Trabajo_final_Herramientas_1
 {
-    class Transaccion
+    public class Transaccion
     {
         private string tipo;
-        private DateTime fechaRealizacion;
-        private int cantidadEjemplares;
+        private DateTime fecha;
+        private int cantidad;
 
-        public Transaccion(string tipo, DateTime fechaRealizacion, int cantidadEjemplares)
+        public Transaccion(string tipo, DateTime fecha, int cantidad)
         {
             this.tipo = tipo;
-            this.fechaRealizacion = fechaRealizacion;
-            this.cantidadEjemplares = cantidadEjemplares;
+            this.fecha = fecha;
+            this.cantidad = cantidad;
         }
 
         public string Tipo { get => tipo; set => tipo = value; }
-        public DateTime FechaRealizacion { get => fechaRealizacion; set => fechaRealizacion = value; }
-        public int CantidadEjemplares { get => cantidadEjemplares; set => cantidadEjemplares = value; }
+        public DateTime Fecha { get => fecha; set => fecha = value; }
+        public int Cantidad { get => cantidad; set => cantidad = value; }
     }
 }

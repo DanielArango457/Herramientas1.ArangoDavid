@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Trabajo_final_Herramientas_1
 {
-    class Tienda
+    public class Tienda
     {
         private List<Libro> catalogo;
-        private int dineroEnCaja;
+        private decimal dineroEnCaja;
         private Fabrica fabrica;
 
         public Tienda()
@@ -17,10 +17,10 @@ namespace Trabajo_final_Herramientas_1
             this.fabrica = new Fabrica();
             this.catalogo = new List<Libro>();
             fabrica.CrearLibros(catalogo);
-            this.DineroEnCaja = 1000000;
+            this.dineroEnCaja = 1000000M; // Inversión inicial
         }
 
-        public int DineroEnCaja { get => dineroEnCaja; set => dineroEnCaja = value; }
-        internal List<Libro> Catalogo { get => catalogo; set => catalogo = value; }
+        public List<Libro> Catalogo { get => catalogo; set => catalogo = value; }
+        public decimal DineroEnCaja { get => dineroEnCaja; set => dineroEnCaja = value; }
     }
 }

@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Trabajo_final_Herramientas_1
 {
-    class Servicios
+    public class Servicios
     {
         public Tienda tienda;
-
 
         public Servicios()
         {
@@ -18,186 +17,104 @@ namespace Trabajo_final_Herramientas_1
 
         internal Tienda Tienda { get => tienda; set => tienda = value; }
 
-        public void registrarLibro(Libro libro)
+        public void AgregarLibro(Libro libro)
         {
             if (libroExiste(libro.ISBN))
             {
-                Console.WriteLine("El libro ya existe en el catálogo.");
-                return;
+                throw new Exception("El libro ya existe en el catálogo.");
             }
             tienda.Catalogo.Add(libro);
-            Console.WriteLine("Libro registrado con éxito.");
-
         }
 
-        public void eliminarLibro(Libro libro)
+        public void EliminarLibro(string isbn)
         {
-            if (!libroExiste(libro.ISBN))
+            var libro = BuscarPorISBN(isbn);
+            if (libro == null)
             {
-                Console.WriteLine("El libro no existe en el catálogo.");
-                return;
+                throw new Exception("El libro no existe en el catálogo.");
             }
             tienda.Catalogo.Remove(libro);
-            Console.WriteLine("Libro eliminado con éxito.");
         }
 
-        public Libro buscarLibroPorTitulo(string titulo)
+        public Libro BuscarPorTitulo(string titulo)
         {
-            foreach (Libro libro in tienda.Catalogo)
-            {
-                if (libro.Titulo == titulo)
-                {
-                    return libro;
-                }
-            }
-            Console.WriteLine("El libro no existe en el catálogo.");
-            return null;
+            return tienda.Catalogo.FirstOrDefault(l => l.Titulo.Equals(titulo, StringComparison.OrdinalIgnoreCase));
         }
 
-        public Libro buscarLibroPorISBN(string isbn)
+        public Libro BuscarPorISBN(string isbn)
         {
-            foreach (Libro libro in tienda.Catalogo)
-            {
-                if (libro.ISBN == isbn)
-                {
-                    return libro;
-                }
-            }
-            Console.WriteLine("El libro no existe en el catálogo.");
-            return null;
+            return tienda.Catalogo.FirstOrDefault(l => l.ISBN == isbn);
         }
 
-        public void abastecerEjemplaresLibro(string isbn, int cantidad)
+        public void AbastecerLibro(string isbn, int cantidad)
         {
-            if (!libroExiste(isbn))
+            var libro = BuscarPorISBN(isbn);
+            if (libro == null)
             {
-                Console.WriteLine("El libro no existe en el catálogo.");
-                return;
+                throw new Exception("El libro no existe en el catálogo.");
             }
-            Libro libro = buscarLibroPorISBN(isbn);
             libro.CantidadActual += cantidad;
-            Transaccion transaccion = new Transaccion("abastecimiento", new DateTime(), cantidad);
-            libro.Transacciones.Add(transaccion);
+            libro.Transacciones.Add(new Transaccion("Abastecimiento", DateTime.Now, cantidad));
         }
 
-        public void venderEjemplaresLibro(Libro libro, int cantidadVendida)
+        public void VenderLibro(string isbn, int cantidadVendida)
         {
-            if (!libroExiste(libro.ISBN))
+            var libro = BuscarPorISBN(isbn);
+            if (libro == null)
             {
-                Console.WriteLine("El libro no existe en el catálogo.");
-                return;
+                throw new Exception("El libro no existe en el catálogo.");
             }
             if (libro.CantidadActual < cantidadVendida)
             {
-                Console.WriteLine("No hay suficientes ejemplares para vender.");
-                return;
+                throw new Exception("No hay suficientes ejemplares para vender.");
             }
             libro.CantidadActual -= cantidadVendida;
             tienda.DineroEnCaja += libro.PrecioVenta * cantidadVendida;
-            Transaccion transaccion = new Transaccion("venta", new DateTime(), cantidadVendida);
-            libro.Transacciones.Add(transaccion);
+            libro.Transacciones.Add(new Transaccion("Venta", DateTime.Now, cantidadVendida));
         }
 
         private bool libroExiste(string isbn)
         {
-            foreach (Libro libro in tienda.Catalogo)
-            {
-                if (libro.ISBN == isbn)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return tienda.Catalogo.Any(l => l.ISBN == isbn);
         }
 
-        public int calcularCantAbastecimiento(Libro libro)
+        public int CalcularTransaccionesAbastecimiento(string isbn)
         {
-
-            if (!libroExiste(libro.ISBN))
+            var libro = BuscarPorISBN(isbn);
+            if (libro == null)
             {
-                Console.WriteLine("El libro no existe en el catálogo.");
-                return 0;
+                throw new Exception("El libro no existe en el catálogo.");
             }
-            int abastecimiento = 0;
-            foreach (Transaccion transaccion in libro.Transacciones)
-            {
-                if (transaccion.Tipo == "abastecimiento")
-                {
-                    abastecimiento += 1;
-                }
-            }
-            return abastecimiento;
-
+            return libro.Transacciones.Count(t => t.Tipo == "Abastecimiento");
         }
 
-        public int calcularVentasPorLibro(Libro libro)
+        public Libro BuscarLibroMasCostoso()
         {
-            if (!libroExiste(libro.ISBN))
+            if (!tienda.Catalogo.Any())
             {
-                Console.WriteLine("El libro no existe en el catálogo.");
-                return 0;
-            }
-            int ventas = 0;
-            foreach (Transaccion transaccion in libro.Transacciones)
-            {
-                if (transaccion.Tipo == "venta")
-                {
-                    ventas += 1;
-                }
-            }
-            return ventas;
-        }
-
-        public Libro buscarMasCostoso()
-        {
-            if (tienda.Catalogo.Count == 0)
-            {
-                Console.WriteLine("No hay libros en el catálogo.");
                 return null;
             }
-            Libro libroMasCostoso = tienda.Catalogo[0];
-            foreach (Libro libro in tienda.Catalogo)
-            {
-                if (libro.PrecioVenta > libroMasCostoso.PrecioVenta) libroMasCostoso = libro;
-
-            }
-            return libroMasCostoso;
+            return tienda.Catalogo.OrderByDescending(l => l.PrecioVenta).First();
         }
 
-        public Libro buscarMenosCostoso()
+        public Libro BuscarLibroMenosCostoso()
         {
-            if (tienda.Catalogo.Count == 0)
+            if (!tienda.Catalogo.Any())
             {
-                Console.WriteLine("No hay libros en el catálogo.");
                 return null;
             }
-            Libro libroMenosCostoso = tienda.Catalogo[0];
-            foreach (Libro libro in tienda.Catalogo)
-            {
-                if (libro.PrecioVenta < libroMenosCostoso.PrecioVenta) libroMenosCostoso = libro;
-            }
-            return libroMenosCostoso;
+            return tienda.Catalogo.OrderBy(l => l.PrecioVenta).First();
         }
 
-        public Libro buscarLibroMasVendido()
+        public Libro BuscarLibroMasVendido()
         {
-            if (tienda.Catalogo.Count == 0)
+            if (!tienda.Catalogo.Any())
             {
-                Console.WriteLine("No hay libros en el catálogo.");
                 return null;
             }
-            Libro libroMasVendido = tienda.Catalogo[0];
-            int ventasLibroMasVendido = calcularVentasPorLibro(libroMasVendido);
-
-            foreach (Libro libro in tienda.Catalogo)
-            {
-                int ventas = calcularVentasPorLibro(libro);
-                if (ventas > ventasLibroMasVendido)
-                {
-                    libroMasVendido = libro;
-                }
-            }
-            return libroMasVendido;
+            return tienda.Catalogo
+                .OrderByDescending(l => l.Transacciones.Count(t => t.Tipo == "Venta"))
+                .First();
         }
 
         public void mostrarLibros()
@@ -217,6 +134,5 @@ namespace Trabajo_final_Herramientas_1
                 Console.WriteLine();
             }
         }
-
     }
 }

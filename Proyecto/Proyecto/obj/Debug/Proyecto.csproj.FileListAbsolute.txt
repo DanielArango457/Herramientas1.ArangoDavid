@@ -1,0 +1,10 @@
+C:\Users\Usuario\Downloads\Herramientas1.ArangoDavid\Proyecto\Proyecto\bin\Debug\Proyecto.exe.config
+C:\Users\Usuario\Downloads\Herramientas1.ArangoDavid\Proyecto\Proyecto\bin\Debug\Proyecto.exe
+C:\Users\Usuario\Downloads\Herramientas1.ArangoDavid\Proyecto\Proyecto\bin\Debug\Proyecto.pdb
+C:\Users\Usuario\Downloads\Herramientas1.ArangoDavid\Proyecto\Proyecto\obj\Debug\Proyecto.csproj.AssemblyReference.cache
+C:\Users\Usuario\Downloads\Herramientas1.ArangoDavid\Proyecto\Proyecto\obj\Debug\Proyecto.Properties.Resources.resources
+C:\Users\Usuario\Downloads\Herramientas1.ArangoDavid\Proyecto\Proyecto\obj\Debug\Proyecto.csproj.GenerateResource.cache
+C:\Users\Usuario\Downloads\Herramientas1.ArangoDavid\Proyecto\Proyecto\obj\Debug\Proyecto.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\Downloads\Herramientas1.ArangoDavid\Proyecto\Proyecto\obj\Debug\Proyecto.exe
+C:\Users\Usuario\Downloads\Herramientas1.ArangoDavid\Proyecto\Proyecto\obj\Debug\Proyecto.pdb
+C:\Users\Usuario\Downloads\Herramientas1.ArangoDavid\Proyecto\Proyecto\obj\Debug\Trabajo_final_Herramientas_1.Form1.resources
